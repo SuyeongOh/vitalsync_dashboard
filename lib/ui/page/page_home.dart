@@ -12,11 +12,22 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Widget body = MainPage();
 
+  void _logout(BuildContext context) async {
+    Navigator.pushReplacementNamed(context, '/login'); // 로그아웃 후 이동
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Vital Sync Dashboard'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => _logout(context),
+          )
+        ],
       ),
       body: body,
       drawer: Drawer(

@@ -8,6 +8,17 @@ import '../database/user_signal_data.dart';
 
 String BASE_URL = "http://35.220.206.239:3000/";
 
+Future<String?> login(String user_id) async {
+  String api = "login";
+  final response = await http.get(Uri.parse("$BASE_URL$api?user_id=$user_id"));
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    return null;
+  }
+}
+
+
 Future<List<UserListData>> fetchUserList() async {
   String api = "user/list";
   final response = await http.get(Uri.parse(BASE_URL + api));
