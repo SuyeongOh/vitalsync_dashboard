@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:vitalsync_dashboard/config.dart';
@@ -10,10 +11,21 @@ String BASE_URL = "http://35.220.206.239:3000/";
 
 Future<String?> login(String user_id) async {
   String api = "login";
-  final response = await http.get(Uri.parse("$BASE_URL$api?user_id=$user_id"));
-  if (response.statusCode == 200) {
-    return response.body;
-  } else {
+  try {
+    final response = await http
+        .get(Uri.parse("$BASE_URL$api?user_id=$user_id"))
+        .timeout(const Duration(seconds: 3)); // ⏳ 3초 제한
+
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return null;
+    }
+  } on TimeoutException {
+    print("요청 시간이 초과되었습니다.");
+    return null;
+  } catch (e) {
+    print("로그인 요청 실패: $e");
     return null;
   }
 }
