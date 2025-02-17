@@ -9,16 +9,15 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController userIdController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
 
   Future<void> _login() async {
     String? result = await login(userIdController.text);
 
+    Navigator.pushReplacementNamed(context, '/home');
+
     if (result != null) {
-      // 로그인 성공 시 HomePage로 이동
       Navigator.pushReplacementNamed(context, '/home');
     } else {
-      // 로그인 실패 시 다이얼로그 표시
       _showErrorDialog();
     }
   }
@@ -32,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
           content: const Text("회원정보가 없습니다!"),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context), // 다이얼로그 닫기
+              onPressed: () => Navigator.pop(context),
               child: const Text("확인"),
             ),
           ],
@@ -43,19 +42,50 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text("Login", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-              TextField(controller: userIdController, decoration: const InputDecoration(labelText: "ID")),
-              TextField(controller: passwordController, decoration: const InputDecoration(labelText: "Password"), obscureText: true),
-              const SizedBox(height: 20),
-              ElevatedButton(onPressed: _login, child: const Text("Login")),
-            ],
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400), // 가로 너비 제한
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text(
+                      "로그인",
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: userIdController,
+                      decoration: const InputDecoration(
+                        labelText: "User ID",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _login,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: const Text("로그인", style: TextStyle(fontSize: 18)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),
