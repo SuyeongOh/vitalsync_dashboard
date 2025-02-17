@@ -17,7 +17,7 @@ class VitalSyncDashBoard extends StatelessWidget {
       title: 'Vital Sync Dashboard',
       debugShowCheckedModeBanner: false,
       routes: {
-        '/login': (context) => LoginPage(),
+        '/': (context) => LoginPage(),
         '/home': (context) => HomePage(),
         '/user/list': (context) => UserListPage(),
       },
